@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="openarm_with_env">
+  
+  <xacro:include filename="$(find openarm_description)/urdf/robot/openarm_robot.xacro"/>
+
+  <xacro:include filename="$(find openarm_env_description)/urdf/table.xacro"/>
+  <xacro:include filename="$(find openarm_env_description)/urdf/apple.xacro"/>
+  <xacro:include filename="$(find openarm_env_description)/urdf/banana.xacro"/>
+  <xacro:include filename="$(find openarm_env_description)/urdf/camera_macro.xacro"/>
+
+  <!-- World link - must be defined before robot and table -->
+  <link name="world"/>
+
+  <!-- Place robot near the front-middle of the table and slightly higher -->
+  <xacro:property name="robot_base_xyz" value="0.8 -0.45 0.35"/>
+
+  <xacro:openarm_robot
+    arm_type="v10"
+    body_type="v10"
+    joint_limits="${xacro.load_yaml('$(find openarm_description)/config/arm/v10/joint_limits.yaml')}"
+    inertials="${xacro.load_yaml('$(find openarm_description)/config/arm/v10/inertials.yaml')}"
+    kinematics="${xacro.load_yaml('$(find openarm_description)/config/arm/v10/kinematics.yaml')}"
+    kinematics_link="${xacro.load_yaml('$(find openarm_description)/config/arm/v10/kinematics_link.yaml')}"
+    kinematics_offset="${xacro.load_yaml('$(find openarm_description)/config/arm/v10/kinematics_offset.yaml')}"
+    body_inertials="${xacro.load_yaml('$(find openarm_description)/config/body/v10/inertials.yaml')}"
+    body_kinematics="${xacro.load_yaml('$(find openarm_description)/config/body/v10/kinematics.yaml')}"
+    body_kinematics_link="${xacro.load_yaml('$(find openarm_description)/config/body/v10/kinematics_link.yaml')}"
+    ee_kinematics_link="${xacro.load_yaml('$(find openarm_description)/config/hand/openarm_hand/kinematics_link.yaml')}"
+    hand="false"
+    ee_type="none"
+    ros2_control="false"
+    use_fake_hardware="false"
+    fake_sensor_commands="false"
+    no_prefix="false"
+    arm_prefix=""
+    body_prefix=""
+    arm_connected_to="base"
+    body_connected_to="world"
+    bimanual="true"
+    right_arm_base_xyz="0.0 -0.031 0.698"
+    left_arm_base_xyz="0.0 0.031 0.698"
+    right_arm_base_rpy="1.5708 0 0"
+    left_arm_base_rpy="-1.5708 0 0"
+    left_can_interface="can1"
+    right_can_interface="can0"
+    left_arm_prefix="left_"
+    right_arm_prefix="right_"
+    can_fd="true"
+    parent="world"
+    xyz="${robot_base_xyz}"
+    rpy="0 0 1.5708"
+  />
+
+  <xacro:property name="table_xyz" value="0.8 0.0 0.0"/>
+  <xacro:property name="table_rpy" value="0 0 0"/>
+  <xacro:property name="table_height" value="0.75"/>
+
+  <xacro:property name="apple_xyz" value="0.8 -0.05 0.75"/>
+  <xacro:property name="banana_xyz" value="0.8 -0.05 0.75"/>
+
+  <xacro:property name="camera_mount_xyz" value="0 0 0.25"/>
+  <xacro:property name="camera_mount_rpy" value="0 0 0"/>
+
+  <xacro:table name="table" xyz="${table_xyz}" rpy="${table_rpy}" size="1 0.6 0.75"/>
+  <joint name="table_fixed" type="fixed">
+    <parent link="world"/>
+    <child link="table"/>
+    <origin xyz="${table_xyz}" rpy="${table_rpy}"/>
+  </joint>
+
+  <!-- Apple position relative to table: apple is at (0.8, 0.1, 0.75) in world, table is at (0.8, 0.0, 0.0) -->
+  <!-- Table top is at z=0.75 (table height), so apple relative offset: (0, 0.1, 0.75) -->
+  <xacro:apple name="apple"/>
+  <joint name="apple_fixed" type="fixed">
+    <parent link="table"/>
+    <child link="apple"/>
+    <origin xyz="0.15 -0.05 ${table_height + 0.04}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Banana position relative to table: banana is at (0.8, -0.1, 0.75) in world, table is at (0.8, 0.0, 0.0) -->
+  <!-- Table top is at z=0.75 (table height), so banana relative offset: (0, -0.1, 0.75) -->
+  <xacro:banana name="banana" length="0.16" radius="0.02"/>
+  <joint name="banana_fixed" type="fixed">
+    <parent link="table"/>
+    <child link="banana"/>
+    <origin xyz="-0.15 -0.05 ${table_height + 0.02}" rpy="0 1.5708 0"/>
+  </joint>
+
+  <xacro:depth_camera parent_link="openarm_body_link0"
+                      camera_name="depth_camera"
+                      xyz="${camera_mount_xyz}"
+                      rpy="${camera_mount_rpy}"/>
+
+</robot>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="table" params="name xyz:='0 0 0' rpy:='0 0 0' size:='1 0.6 0.75'">
+    <xacro:property name="table_height_z" value="${float(size.split(' ')[2])}"/>
+    
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 ${table_height_z / 2.0}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${size}"/>
+        </geometry>
+        <material name="Grey">
+          <color rgba="0.6 0.6 0.6 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${table_height_z / 2.0}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${size}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="10"/>
+        <origin xyz="0 0 ${table_height_z / 2.0}"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+</robot>
