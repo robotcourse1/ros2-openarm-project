@@ -1,0 +1,325 @@
+<mujoco model="openarm_env_static">
+  <!--
+    Static/demo scene:
+      - Same geometry as openarm_env.xml
+      - Adds position actuators to hold joints at a fixed pose (ctrl=0 by default)
+      - Intended for stable screenshots / demos (A: 环境与仿真建设)
+  -->
+  <compiler angle="radian" coordinate="local" inertiafromgeom="true"/>
+  <!-- Static/demo: turn off gravity to avoid slow settling/jitter -->
+  <option gravity="0 0 0" timestep="0.001"/>
+
+  <!-- Defaults
+    - Give robot parts a consistent material (fixes "blue parts" look).
+    - Disable robot self-collision (improves stability; still collides with table/props).
+    - Add joint springs so the arm doesn't immediately flop under gravity.
+  -->
+  <default>
+    <!-- Collision groups:
+         robot: contype=1, conaffinity=6 (collide with table=2 and props=4, not with robot)
+         table: contype=2, conaffinity=5 (collide with robot=1 and props=4)
+         props: contype=4, conaffinity=3 (collide with robot=1 and table=2)
+    -->
+    <!-- For the static/demo scene we disable contacts entirely so nothing "micro-moves" due to contact solver. -->
+    <default class="robot">
+      <geom material="robot_mat" contype="0" conaffinity="0"/>
+      <joint stiffness="60" springref="0" frictionloss="0.05" armature="0.01"/>
+    </default>
+    <default class="table">
+      <geom contype="0" conaffinity="0"/>
+    </default>
+    <default class="prop">
+      <geom contype="0" conaffinity="0"/>
+    </default>
+  </default>
+
+  <asset>
+    <texture name="skybox" type="skybox" builtin="gradient" rgb1="0.2 0.2 0.2" rgb2="0.1 0.1 0.1" width="512" height="512"/>
+    <material name="table_mat" rgba="0.6 0.6 0.6 1.0"/>
+    <material name="apple_mat" rgba="0.8 0.1 0.1 1.0"/>
+    <material name="banana_mat" rgba="0.9 0.8 0.1 1.0"/>
+    <material name="robot_mat" rgba="0.0 0.4 0.8 1.0"/>
+    
+    <!-- OpenArm robot meshes (relative to this XML location).
+         In install space: XML is at install/openarm_env_description/share/openarm_env_description/mujoco/
+         Meshes are at: install/openarm_description/share/openarm_description/meshes/
+         Relative path: ../../openarm_description/share/openarm_description/meshes/
+         Left arm meshes are mirrored on Y (scale y = -0.001) to match URDF reflect. -->
+    <mesh name="body_link0_mesh"   file="../../openarm_description/share/openarm_description/meshes/body/v10/visual/body_link0.stl" scale="0.001 0.001 0.001"/>
+
+    <mesh name="left_link0_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link0.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link1_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link1.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link2_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link2.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link3_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link3.stl" scale="0.001 -0.001 0.001"/>
+    <!-- link4 is NOT mirrored in URDF -->
+    <mesh name="left_link4_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link4.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="left_link5_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link5.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link6_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link6.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link7_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link7.stl" scale="0.001 -0.001 0.001"/>
+
+    <mesh name="right_link0_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link0.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link1_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link2_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link2.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link3_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link3.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link4_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link4.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link5_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link5.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link6_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link6.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link7_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link7.stl" scale="0.001 0.001 0.001"/>
+  </asset>
+
+  <worldbody>
+    <light name="main_light" pos="2 2 2" dir="-1 -1 -2"/>
+
+    <!--
+      OpenArm-like robot model for MuJoCo visualization.
+      - Base pose aligned with URDF base pose in openarm_with_env.xacro:
+          parent: world
+          xyz:   0.8 -0.45 0.35
+          rpy:   0 0 1.5708
+      - Naming and joint axes follow openarm_description:
+          base link:  openarm_body_link0
+          left arm links:  openarm_left_link0 ... openarm_left_link7
+          left arm joints: openarm_left_joint1 ... openarm_left_joint7
+          right arm links: openarm_right_link0 ... openarm_right_link7
+          right arm joints: openarm_right_joint1 ... openarm_right_joint7
+      - Joint ranges copied from config/arm/v10/joint_limits.yaml (radians)
+      - Bimanual configuration: left arm at (0, 0.031, 0.698), right arm at (0, -0.031, 0.698)
+    -->
+    <body name="openarm_body_link0" pos="0.8 -0.45 0.35" euler="0 0 1.5708">
+      <!-- Base column fixed on the ground -->
+      <geom class="robot" name="openarm_body_link0_geom" type="mesh" mesh="body_link0_mesh"
+            pos="0 0 0"
+            density="5000" friction="1.0 0.01 0.01"/>
+      
+      <!-- Depth camera mounted on body_link0, matching URDF configuration:
+           URDF: parent_link="openarm_body_link0", xyz="0 0 0.25", rpy="0 0 0"
+           Camera optical frame: rpy="-1.5708 0 -1.5708" (matching URDF's -M_PI/2 0 -M_PI/2) -->
+      <body name="depth_camera_link" pos="0 0 0.25">
+        <geom class="robot" name="depth_camera_link_geom" type="box"
+              size="0.025 0.025 0.01"
+              material="robot_mat" density="200" friction="0.1 0.01 0.01"/>
+        <!-- Camera optical frame: rotated to match URDF's depth_camera_optical_frame -->
+        <camera name="depth_camera" pos="0 0 0" euler="-1.5708 0 -1.5708"/>
+      </body>
+
+      <!-- Left arm kinematic chain: 7-DOF, names and axes aligned with URDF -->
+      <!-- Left arm base: xyz="0.0 0.031 0.698", rpy="-1.5708 0 0" (relative to body_link0) -->
+      <body name="openarm_left_link0" pos="0.0 0.031 0.698" euler="-1.5708 0 0">
+        <!-- link0 visual geometry -->
+        <geom class="robot" name="openarm_left_link0_geom" type="mesh" mesh="left_link0_mesh"
+              pos="0 0 0"
+              density="3000" friction="1.0 0.01 0.01"/>
+
+        <!-- joint1 (URDF): origin xyz="0 0 0.0625", axis="0 0 1" -->
+        <body name="openarm_left_link1" pos="0 0 0.0625">
+          <joint name="openarm_left_joint1" type="hinge"
+                 axis="0 0 1" limited="true"
+                 range="-3.490659 1.396263" damping="1.0"/>
+          <geom class="robot" name="openarm_left_link1_geom" type="mesh" mesh="left_link1_mesh"
+                pos="0 0 -0.0625"
+                density="3000" friction="1.0 0.01 0.01"/>
+
+          <!-- joint2 (URDF): origin xyz="-0.0301 0 0.06", rpy="-1.57079632679 0 0", axis="-1 0 0" -->
+          <body name="openarm_left_link2" pos="-0.0301 0 0.06" euler="-1.57079632679 0 0">
+            <joint name="openarm_left_joint2" type="hinge"
+                   axis="-1 0 0" limited="true"
+                   range="-3.3161253267948965 0.17453267320510335" damping="1.0"/>
+            <geom class="robot" name="openarm_left_link2_geom" type="mesh" mesh="left_link2_mesh"
+                  pos="0.0301 0 -0.1225"
+                  density="3000" friction="1.0 0.01 0.01"/>
+
+            <!-- joint3 (URDF): origin xyz="0.0301 0 0.06625", axis="0 0 1" -->
+            <body name="openarm_left_link3" pos="0.0301 0 0.06625">
+              <joint name="openarm_left_joint3" type="hinge"
+                     axis="0 0 1" limited="true"
+                     range="-1.570796 1.570796" damping="0.8"/>
+              <geom class="robot" name="openarm_left_link3_geom" type="mesh" mesh="left_link3_mesh"
+                    pos="0 0 -0.18875"
+                    density="2800" friction="1.0 0.01 0.01"/>
+
+              <!-- joint4: axis (0 1 0), range [0.0, 2.443461] -->
+              <!-- joint4 (URDF): origin xyz="0 0.0315 0.15375", axis="0 1 0" -->
+              <body name="openarm_left_link4" pos="0 0.0315 0.15375">
+                <joint name="openarm_left_joint4" type="hinge"
+                       axis="0 1 0" limited="true"
+                       range="0.0 2.443461" damping="0.8"/>
+                <geom class="robot" name="openarm_left_link4_geom" type="mesh" mesh="left_link4_mesh"
+                      pos="0 -0.0315 -0.3425"
+                      density="2600" friction="1.0 0.01 0.01"/>
+
+                <!-- joint5: axis (0 0 1), range [-1.570796, 1.570796] -->
+                <!-- joint5 (URDF): origin xyz="0 -0.0315 0.0955", axis="0 0 1" -->
+                <body name="openarm_left_link5" pos="0 -0.0315 0.0955">
+                  <joint name="openarm_left_joint5" type="hinge"
+                         axis="0 0 1" limited="true"
+                         range="-1.570796 1.570796" damping="0.6"/>
+                  <geom class="robot" name="openarm_left_link5_geom" type="mesh" mesh="left_link5_mesh"
+                        pos="0 0 -0.438"
+                        density="2400" friction="1.0 0.01 0.01"/>
+
+                  <!-- joint6: axis (1 0 0), range [-0.785398, 0.785398] -->
+                  <!-- joint6 (URDF): origin xyz="0.0375 0 0.1205", axis="1 0 0" -->
+                  <body name="openarm_left_link6" pos="0.0375 0 0.1205">
+                    <joint name="openarm_left_joint6" type="hinge"
+                           axis="1 0 0" limited="true"
+                           range="-0.785398 0.785398" damping="0.5"/>
+                    <geom class="robot" name="openarm_left_link6_geom" type="mesh" mesh="left_link6_mesh"
+                          pos="-0.0375 0 -0.5585"
+                          density="2200" friction="1.0 0.01 0.01"/>
+
+                    <!-- joint7: axis (0 -1 0) for left arm, range [-1.570796, 1.570796] -->
+                    <!-- joint7 (URDF): origin xyz="-0.0375 0 0", axis="0 -1 0" -->
+                    <body name="openarm_left_link7" pos="-0.0375 0 0">
+                      <joint name="openarm_left_joint7" type="hinge"
+                             axis="0 -1 0" limited="true"
+                             range="-1.570796 1.570796" damping="0.5"/>
+                      <geom class="robot" name="openarm_left_link7_geom" type="mesh" mesh="left_link7_mesh"
+                            pos="0 0 -0.5585"
+                            density="2000" friction="1.0 0.01 0.01"/>
+
+                      <!-- Simple tool frame at the end of link7 -->
+                      <body name="openarm_left_tool" pos="0 0 0.10">
+                        <geom class="robot" name="openarm_left_tool_geom" type="box"
+                              size="0.03 0.03 0.02"
+                              material="robot_mat" density="2000" friction="1.0 0.01 0.01"/>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- Right arm kinematic chain: 7-DOF, names and axes aligned with URDF -->
+      <!-- Right arm base: xyz="0.0 -0.031 0.698", rpy="1.5708 0 0" (relative to body_link0) -->
+      <body name="openarm_right_link0" pos="0.0 -0.031 0.698" euler="1.5708 0 0">
+        <!-- link0 visual geometry -->
+      <geom class="robot" name="openarm_right_link0_geom" type="mesh" mesh="right_link0_mesh"
+              pos="0 0 0"
+              density="3000" friction="1.0 0.01 0.01"/>
+
+        <!-- joint1 (URDF): origin xyz="0 0 0.0625", axis="0 0 1" -->
+        <body name="openarm_right_link1" pos="0 0 0.0625">
+          <joint name="openarm_right_joint1" type="hinge"
+                 axis="0 0 1" limited="true"
+                 range="-1.396263 3.490659" damping="1.0"/>
+        <geom class="robot" name="openarm_right_link1_geom" type="mesh" mesh="right_link1_mesh"
+                pos="0 0 -0.0625"
+                density="3000" friction="1.0 0.01 0.01"/>
+
+          <!-- joint2 (URDF): origin xyz="-0.0301 0 0.06", rpy="1.57079632679 0 0", axis="-1 0 0" -->
+          <body name="openarm_right_link2" pos="-0.0301 0 0.06" euler="1.57079632679 0 0">
+            <joint name="openarm_right_joint2" type="hinge"
+                   axis="-1 0 0" limited="true"
+                   range="-0.17453267320510335 3.3161253267948965" damping="1.0"/>
+          <geom class="robot" name="openarm_right_link2_geom" type="mesh" mesh="right_link2_mesh"
+                  pos="0.0301 0 -0.1225"
+                  density="3000" friction="1.0 0.01 0.01"/>
+
+            <!-- joint3: axis (0 0 1), range [-1.570796, 1.570796] -->
+            <!-- joint3 (URDF): origin xyz="0.0301 0 0.06625", axis="0 0 1" -->
+            <body name="openarm_right_link3" pos="0.0301 0 0.06625">
+              <joint name="openarm_right_joint3" type="hinge"
+                     axis="0 0 1" limited="true"
+                     range="-1.570796 1.570796" damping="0.8"/>
+            <geom class="robot" name="openarm_right_link3_geom" type="mesh" mesh="right_link3_mesh"
+                    pos="0 0 -0.18875"
+                    density="2800" friction="1.0 0.01 0.01"/>
+
+              <!-- joint4: axis (0 1 0), range [0.0, 2.443461] -->
+              <!-- joint4 (URDF): origin xyz="0 0.0315 0.15375", axis="0 1 0" -->
+              <body name="openarm_right_link4" pos="0 0.0315 0.15375">
+                <joint name="openarm_right_joint4" type="hinge"
+                       axis="0 1 0" limited="true"
+                       range="0.0 2.443461" damping="0.8"/>
+              <geom class="robot" name="openarm_right_link4_geom" type="mesh" mesh="right_link4_mesh"
+                      pos="0 -0.0315 -0.3425"
+                      density="2600" friction="1.0 0.01 0.01"/>
+
+                <!-- joint5: axis (0 0 1), range [-1.570796, 1.570796] -->
+                <!-- joint5 (URDF): origin xyz="0 -0.0315 0.0955", axis="0 0 1" -->
+                <body name="openarm_right_link5" pos="0 -0.0315 0.0955">
+                  <joint name="openarm_right_joint5" type="hinge"
+                         axis="0 0 1" limited="true"
+                         range="-1.570796 1.570796" damping="0.6"/>
+                <geom class="robot" name="openarm_right_link5_geom" type="mesh" mesh="right_link5_mesh"
+                        pos="0 0 -0.438"
+                        density="2400" friction="1.0 0.01 0.01"/>
+
+                  <!-- joint6: axis (1 0 0), range [-0.785398, 0.785398] -->
+                  <!-- joint6 (URDF): origin xyz="0.0375 0 0.1205", axis="1 0 0" -->
+                  <body name="openarm_right_link6" pos="0.0375 0 0.1205">
+                    <joint name="openarm_right_joint6" type="hinge"
+                           axis="1 0 0" limited="true"
+                           range="-0.785398 0.785398" damping="0.5"/>
+                  <geom class="robot" name="openarm_right_link6_geom" type="mesh" mesh="right_link6_mesh"
+                          pos="-0.0375 0 -0.5585"
+                          density="2200" friction="1.0 0.01 0.01"/>
+
+                    <!-- joint7: axis (0 1 0) for right arm (opposite to left), range [-1.570796, 1.570796] -->
+                    <!-- joint7 (URDF): origin xyz="-0.0375 0 0", axis="0 1 0" -->
+                    <body name="openarm_right_link7" pos="-0.0375 0 0">
+                      <joint name="openarm_right_joint7" type="hinge"
+                             axis="0 1 0" limited="true"
+                             range="-1.570796 1.570796" damping="0.5"/>
+                    <geom class="robot" name="openarm_right_link7_geom" type="mesh" mesh="right_link7_mesh"
+                            pos="0 0 -0.5585"
+                            density="2000" friction="1.0 0.01 0.01"/>
+
+                      <!-- Simple tool frame at the end of link7 -->
+                      <body name="openarm_right_tool" pos="0 0 0.10">
+                      <geom class="robot" name="openarm_right_tool_geom" type="box"
+                              size="0.03 0.03 0.02"
+                              material="robot_mat" density="2000" friction="1.0 0.01 0.01"/>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+
+    <!-- Table: center at z=0.375 so top is at z=0.75 (matches URDF height 0.75) -->
+    <body name="table" pos="0.8 0 0.375">
+      <geom class="table" name="table_geom" type="box" size="0.5 0.3 0.375" material="table_mat" density="700" friction="1.0 0.01 0.01"/>
+
+      <!-- Apple at table top (relative offset to table) -->
+      <body name="apple" pos="0.15 -0.05 0.415">
+        <geom class="prop" name="apple_geom" type="sphere" size="0.04" material="apple_mat" density="800" friction="0.9 0.01 0.01"/>
+      </body>
+
+      <!-- Banana at table top (relative offset to table) -->
+      <body name="banana" pos="-0.15 -0.05 0.395">
+        <geom class="prop" name="banana_geom" type="capsule" fromto="-0.08 0 0 0.08 0 0" size="0.02" material="banana_mat" density="600" friction="0.9 0.01 0.01"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <!-- Position actuators: hold a fixed pose (ctrl defaults to 0 for all actuators). -->
+  <actuator>
+    <!-- Left arm -->
+    <position name="pos_openarm_left_joint1" joint="openarm_left_joint1" kp="250" kv="25" ctrlrange="-3.490659 1.396263"/>
+    <position name="pos_openarm_left_joint2" joint="openarm_left_joint2" kp="250" kv="25" ctrlrange="-3.3161253267948965 0.17453267320510335"/>
+    <position name="pos_openarm_left_joint3" joint="openarm_left_joint3" kp="250" kv="25" ctrlrange="-1.570796 1.570796"/>
+    <position name="pos_openarm_left_joint4" joint="openarm_left_joint4" kp="250" kv="25" ctrlrange="0.0 2.443461"/>
+    <position name="pos_openarm_left_joint5" joint="openarm_left_joint5" kp="200" kv="20" ctrlrange="-1.570796 1.570796"/>
+    <position name="pos_openarm_left_joint6" joint="openarm_left_joint6" kp="150" kv="15" ctrlrange="-0.785398 0.785398"/>
+    <position name="pos_openarm_left_joint7" joint="openarm_left_joint7" kp="150" kv="15" ctrlrange="-1.570796 1.570796"/>
+
+    <!-- Right arm -->
+    <position name="pos_openarm_right_joint1" joint="openarm_right_joint1" kp="250" kv="25" ctrlrange="-1.396263 3.490659"/>
+    <position name="pos_openarm_right_joint2" joint="openarm_right_joint2" kp="250" kv="25" ctrlrange="-0.17453267320510335 3.3161253267948965"/>
+    <position name="pos_openarm_right_joint3" joint="openarm_right_joint3" kp="250" kv="25" ctrlrange="-1.570796 1.570796"/>
+    <position name="pos_openarm_right_joint4" joint="openarm_right_joint4" kp="250" kv="25" ctrlrange="0.0 2.443461"/>
+    <position name="pos_openarm_right_joint5" joint="openarm_right_joint5" kp="200" kv="20" ctrlrange="-1.570796 1.570796"/>
+    <position name="pos_openarm_right_joint6" joint="openarm_right_joint6" kp="150" kv="15" ctrlrange="-0.785398 0.785398"/>
+    <position name="pos_openarm_right_joint7" joint="openarm_right_joint7" kp="150" kv="15" ctrlrange="-1.570796 1.570796"/>
+  </actuator>
+</mujoco>
+
+

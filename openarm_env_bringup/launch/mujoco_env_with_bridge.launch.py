@@ -2,6 +2,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.actions import Node
 
 
 def _as_bool(s: str) -> bool:
@@ -32,7 +33,15 @@ def _launch_setup(context, *args, **kwargs):
         output="screen",
     )
 
-    return [run_viewer]
+    mujoco_bridge = Node(
+        package="openarm_env_bringup",
+        executable="mujoco_ros_bridge",
+        name="mujoco_ros_bridge",
+        output="screen",
+        parameters=[{"xml": xml_path}],
+    )
+
+    return [run_viewer, mujoco_bridge]
 
 
 def generate_launch_description():
@@ -48,11 +57,5 @@ def generate_launch_description():
     )
 
     return LaunchDescription([static_arg, xml_arg, OpaqueFunction(function=_launch_setup)])
-
-
-
-
-
-
 
 

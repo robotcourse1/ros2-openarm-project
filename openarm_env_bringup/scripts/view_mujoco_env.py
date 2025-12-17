@@ -14,6 +14,8 @@ import mujoco
 from mujoco import viewer
 from ament_index_python.packages import get_package_share_directory
 
+from openarm_env_bringup.mujoco_xml_utils import patch_xml_mesh_paths
+
 
 def resolve_xml_path(cli_path: str | None) -> pathlib.Path:
     if cli_path:
@@ -31,8 +33,26 @@ def main() -> None:
     if not xml_path.exists():
         raise FileNotFoundError(f"MuJoCo xml not found: {xml_path}")
 
-    model = mujoco.MjModel.from_xml_path(str(xml_path))
-    data = mujoco.MjData(model)
+    # Patch XML mesh paths so it works both in install space and in --symlink-install.
+    patched_xml_path: pathlib.Path | None = None
+    try:
+        patched_xml_path = patch_xml_mesh_paths(xml_path)
+        print(f"Using patched MuJoCo XML: {patched_xml_path}")
+    except Exception as e:
+        print(f"Warning: could not patch XML mesh paths: {e}")
+        print("Falling back to loading the original XML; mesh loads may fail.")
+
+    # Load model
+    # MuJoCo will attempt to load meshes using paths specified in XML
+    # If mesh files are not found, MuJoCo may fall back to simplified geometry or show errors
+    try:
+        model = mujoco.MjModel.from_xml_path(str(patched_xml_path or xml_path))
+        data = mujoco.MjData(model)
+        print("Model loaded successfully.")
+    except Exception as e:
+        print(f"Error loading MuJoCo model: {e}")
+        print("This might be due to incorrect mesh file paths.")
+        raise
 
     with viewer.launch_passive(model, data) as v:
         last_time = time.time()
@@ -48,6 +68,10 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+
+
 
 
 

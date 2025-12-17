@@ -1,0 +1,52 @@
+# ========== 1. 环境准备与构建 ==========
+cd ~/openarm_ws
+source /opt/ros/${ROS_DISTRO}/setup.bash
+colcon build --symlink-install --packages-select openarm_description openarm_env_description openarm_env_bringup
+source install/setup.bash
+
+# ========== 2. 验证包安装 ==========
+ros2 pkg list | grep openarm
+ls install/openarm_env_bringup/share/openarm_env_bringup/launch
+
+# ========== 3. 测试 Xacro 解析 ==========
+xacro /home/ljh/openarm_ws/install/openarm_env_description/share/openarm_env_description/urdf/openarm_with_env.xacro > /tmp/test.urdf
+wc -l /tmp/test.urdf
+
+# ========== 4. RViz 场景测试 ==========
+# 终端1：启动RViz
+ros2 launch openarm_env_bringup display_env.launch.py
+
+# 终端2：检查robot_description话题
+ros2 topic echo /robot_description --once | head -20
+
+# 终端3：检查TF树
+ros2 run tf2_ros tf2_echo world table
+ros2 run tf2_ros tf2_echo world apple
+ros2 run tf2_ros tf2_echo world depth_camera_link
+
+# 终端4：生成TF树图
+ros2 run tf2_tools view_frames
+evince frames.pdf  # 查看生成的PDF
+
+# ========== 5. MuJoCo 场景测试（带 ROS2 关节桥接）==========
+# 终端1：启动 MuJoCo viewer + MuJoCo→ROS2 关节状态桥
+#
+# 默认使用“静态稳定展示”场景（openarm_env_static.xml）：关节由 position actuator 拉回 0 位姿，
+# 适合 A 任务截图/录屏（像 URDF 一样稳，不会松散飘动）。
+ros2 launch openarm_env_bringup mujoco_env_with_bridge.launch.py
+#
+# 如果你需要“能动但更稳”的动态场景（openarm_env.xml），关闭 static 即可：
+# ros2 launch openarm_env_bringup mujoco_env_with_bridge.launch.py static:=false
+#
+# 也可以手动指定任意 XML（仅在 static:=false 时生效）：
+# ros2 launch openarm_env_bringup mujoco_env_with_bridge.launch.py static:=false xml:=/abs/path/to/openarm_env.xml
+
+# ========== 6. 检查 MuJoCo 关节话题 ==========
+ros2 topic list
+ros2 topic echo /mujoco_joint_states --once
+
+# ========== 7. 验证所有TF连接（仍基于 RViz 场景）==========
+ros2 run tf2_ros tf2_echo world openarm_body_link0
+ros2 run tf2_ros tf2_echo world banana
+ros2 run tf2_ros tf2_echo openarm_body_link0 depth_camera_link
+ros2 run tf2_ros tf2_echo depth_camera_link depth_camera_optical_frame

@@ -28,6 +28,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'mujoco_ros_bridge = openarm_env_bringup.mujoco_ros_bridge:main',
         ],
     },
 )
