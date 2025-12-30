@@ -55,9 +55,6 @@ git clone https://github.com/JafarAbdi/pymoveit2.git
 ---
 
 ## 工作空间设置
-
-### 正确的目录结构
-
 项目应该位于以下结构：
 ```
 ~/openarm_ws/
@@ -82,6 +79,26 @@ ls -la
 
 # 应该看到所有包目录
 # 如果项目已经在正确位置，直接进入下一步编译
+```
+
+### 如果项目不在正确位置
+
+如果项目在其他位置，可以创建符号链接：
+
+```bash
+# 创建工作空间（如果不存在）
+mkdir -p ~/openarm_ws/src
+
+# 进入src目录
+cd ~/openarm_ws/src
+
+# 创建符号链接指向实际项目位置
+# 例如：如果项目在 /path/to/your/project
+ln -s /path/to/your/project ros2-openarm-project
+
+# 验证
+ls ros2-openarm-project/
+# 应该看到：openarm_description, motion_control 等目录
 ```
 
 ### 使用验证脚本
@@ -180,6 +197,15 @@ ros2 topic pub /target_pose geometry_msgs/Point "{x: 0.5, y: 0.0, z: 0.3}" -1
 ros2 run motion_control test_grasp
 ```
 
+### 一键启动（系统集成 - 成员D的工作）
+
+如果成员D已经创建了总控launch文件：
+
+```bash
+# 启动完整系统
+ros2 launch system_bringup full_system.launch.py
+```
+
 ---
 
 ## 数据收集与分析
@@ -240,6 +266,13 @@ ls -la
 
 # 确认openarm_description目录存在
 # 如果不存在，检查项目是否完整
+# 如果项目在其他位置，创建符号链接：
+cd ~/openarm_ws/src
+rm -rf ros2-openarm-project  # 如果存在但路径不对
+ln -s /path/to/actual/project ros2-openarm-project
+
+# 验证
+ls ros2-openarm-project/openarm_description
 ```
 
 ### 问题2：MoveIt2无法连接
@@ -303,6 +336,16 @@ ros2 run motion_control gripper_controller
     ros2-openarm-project/          # 项目根目录
       ├── openarm_description/      # 机器人模型（成员A）- CMake包
       ├── openarm_moveit_config/    # MoveIt配置（成员C）- CMake包 ⭐
+      │   ├── CMakeLists.txt
+      │   ├── package.xml
+      │   ├── config/               # MoveIt配置文件
+      │   │   ├── openarm.srdf
+      │   │   ├── moveit_controllers.yaml
+      │   │   ├── ros2_controllers.yaml
+      │   │   ├── kinematics.yaml
+      │   │   └── joint_limits.yaml
+      │   └── launch/               # Launch文件
+      │       └── demo.launch.py
       ├── openarm_env_description/  # 环境模型（成员A）- CMake包
       ├── openarm_env_bringup/      # 环境启动（成员A）- Python包
       ├── perception/               # 视觉感知（成员B）- Python包
@@ -377,5 +420,3 @@ ros2 run motion_control statistics_analyzer
 3. MoveIt2官方文档
 
 ---
-
-**最后更新**: 2024年

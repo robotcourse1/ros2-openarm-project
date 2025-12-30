@@ -1,3 +1,4 @@
+
 # Motion Control Package - 成员C的工作成果
 
 本包实现了基于MoveIt2的运动规划与控制功能，用于openarm双臂机器人的抓取任务。
@@ -5,10 +6,13 @@
 ## 功能特性
 
 1. **MoveIt2集成**：使用pymoveit2库实现运动规划接口
-2. **OMPL规划器配置**：支持多种OMPL规划算法（RRTConnect等）
+2. **OMPL规划器配置**：支持多种OMPL规划算法（RRTConnect、RRT*、PRM等）
 3. **抓取状态机**：实现完整的抓取流程（预抓取→抓取→提升→放置→返回）
 4. **夹爪控制**：支持夹爪开合控制
 5. **物体位置订阅**：订阅`/target_pose`话题获取物体位置
+
+
+📋 **详细任务完成情况请参考：** [成员C任务完成报告](MEMBER_C_REPORT.md)
 
 ## 节点说明
 
@@ -127,4 +131,15 @@ ros2 run motion_control statistics_analyzer
 - `smoothness_analysis_*.png` - 轨迹平滑度分析图
 - `success_rate_*.png` - 成功率分析图
 - `statistics_report_*.txt` - 统计报告
+
+## 参考资源
+
+- `src/pymoveit2`: MoveIt2 Python接口参考
+- `src/openarm_control`: 控制接口参考
+- `openarm_moveit_config`: MoveIt配置参考
+
+## 相关文档
+
+- [成员C任务完成报告](MEMBER_C_REPORT.md) - 详细的任务完成情况和技术说明
+
 

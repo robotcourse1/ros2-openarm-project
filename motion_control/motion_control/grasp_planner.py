@@ -8,6 +8,7 @@
 import math
 import os
 import time
+
 from enum import Enum
 from threading import Thread
 from typing import Optional
@@ -46,7 +47,6 @@ except ImportError:
     ArmController = None
     print("Warning: openarm_control/arm_controller.py not found, using MoveIt2 directly")
 
-
 class GraspState(Enum):
     """抓取状态机状态"""
     IDLE = "idle"                    # 空闲状态
@@ -72,6 +72,7 @@ class GraspPlanner(Node):
         self.declare_parameter('gripper_group', 'left_hand')
         self.declare_parameter('base_link', 'base')
         self.declare_parameter('end_effector_link', 'openarm_left_link7')
+
         self.declare_parameter('planner_id', 'RRTConnectkConfigDefault')  # 基于 openarm_moveit_config/config/ompl_planning.yaml
         self.declare_parameter('max_velocity', 0.3)  # 基于 openarm_moveit_config/config/joint_limits.yaml
         self.declare_parameter('max_acceleration', 0.3)
@@ -205,7 +206,8 @@ class GraspPlanner(Node):
     
     def target_pose_callback(self, msg: Point):
         """接收物体位置的回调函数"""
-        if self.current_state == GraspState.IDLE:
+        if self.current_state == GraspState.IDLE or self.current_state == GraspState.FAILED:
+            # 允许在IDLE或FAILED状态下接收新的目标
             self.target_pose = msg
             self.get_logger().info(
                 f'收到物体位置: x={msg.x:.3f}, y={msg.y:.3f}, z={msg.z:.3f}'
@@ -243,6 +245,12 @@ class GraspPlanner(Node):
             self.execute_place()
         elif self.current_state == GraspState.RETURNING:
             self.execute_return()
+        elif self.current_state == GraspState.FAILED:
+            # FAILED状态：保持失败状态，等待外部重置或新的目标
+            pass
+        elif self.current_state == GraspState.COMPLETED:
+            # COMPLETED状态：应该已经转换为IDLE，这里作为保护
+            pass
     
     def execute_pre_grasp(self):
         """执行预抓取：移动到物体上方"""

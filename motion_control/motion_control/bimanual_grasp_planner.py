@@ -160,11 +160,14 @@ class BimanualGraspPlanner(Node):
     
     def target_pose_callback(self, msg: Point):
         """接收物体位置"""
-        if self.current_state == BimanualGraspState.IDLE:
+        if self.current_state == BimanualGraspState.IDLE or self.current_state == BimanualGraspState.FAILED:
+            # 允许在IDLE或FAILED状态下接收新的目标
             self.target_pose = msg
             self.get_logger().info(f'收到物体位置: x={msg.x:.3f}, y={msg.y:.3f}, z={msg.z:.3f}')
             self.current_state = BimanualGraspState.PLANNING
             self.publish_state()
+        else:
+            self.get_logger().warn(f'当前状态 {self.current_state.value}，忽略新的物体位置')
     
     def state_machine_callback(self):
         """状态机主循环"""
@@ -197,6 +200,12 @@ class BimanualGraspPlanner(Node):
             self.execute_place()
         elif self.current_state == BimanualGraspState.RETURNING:
             self.execute_return()
+        elif self.current_state == BimanualGraspState.FAILED:
+            # FAILED状态：保持失败状态，等待外部重置或新的目标
+            pass
+        elif self.current_state == BimanualGraspState.COMPLETED:
+            # COMPLETED状态：应该已经转换为IDLE，这里作为保护
+            pass
     
     def execute_planning(self):
         """执行规划：计算双臂抓取策略"""
