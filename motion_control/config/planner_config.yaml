@@ -1,0 +1,41 @@
+# OMPL规划器配置
+# 用于参考和文档说明
+
+planners:
+  # RRTConnect - 双向快速探索随机树，适合大多数场景
+  RRTConnectkConfigDefault:
+    type: "geometric::RRTConnect"
+    range: 0.0  # 0.0表示自动选择
+    
+  # RRT - 单树快速探索随机树
+  RRTkConfigDefault:
+    type: "geometric::RRT"
+    range: 0.0
+    
+  # RRT* - 最优快速探索随机树
+  RRTstarkConfigDefault:
+    type: "geometric::RRTstar"
+    range: 0.0
+    
+  # PRM - 概率路线图
+  PRMkConfigDefault:
+    type: "geometric::PRM"
+    
+  # PRM* - 最优概率路线图
+  PRMstarkConfigDefault:
+    type: "geometric::PRMstar"
+
+# 规划参数建议
+planning_parameters:
+  # 速度缩放（0.0-1.0）
+  max_velocity: 0.3  # 保守值，确保安全
+  max_acceleration: 0.3
+  
+  # 抓取相关参数（单位：米）
+  pre_grasp_offset_z: 0.15   # 预抓取位置在物体上方的高度
+  grasp_offset_z: 0.02        # 抓取位置相对物体的高度偏移
+  lift_height: 0.2           # 提升高度
+  
+  # 放置位置（base坐标系，单位：米）
+  place_position: [0.5, 0.3, 0.3]  # [x, y, z]
+

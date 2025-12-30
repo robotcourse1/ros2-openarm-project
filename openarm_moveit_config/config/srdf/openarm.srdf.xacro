@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="openarm">
+  <!-- Planning Groups -->
+  <group name="left_arm">
+    <chain base_link="base" tip_link="openarm_left_link7"/>
+    <joint name="openarm_left_joint1"/>
+    <joint name="openarm_left_joint2"/>
+    <joint name="openarm_left_joint3"/>
+    <joint name="openarm_left_joint4"/>
+    <joint name="openarm_left_joint5"/>
+    <joint name="openarm_left_joint6"/>
+    <joint name="openarm_left_joint7"/>
+  </group>
+
+  <group name="right_arm">
+    <chain base_link="base" tip_link="openarm_right_link7"/>
+    <joint name="openarm_right_joint1"/>
+    <joint name="openarm_right_joint2"/>
+    <joint name="openarm_right_joint3"/>
+    <joint name="openarm_right_joint4"/>
+    <joint name="openarm_right_joint5"/>
+    <joint name="openarm_right_joint6"/>
+    <joint name="openarm_right_joint7"/>
+  </group>
+
+  <group name="left_hand">
+    <joint name="openarm_left_finger_joint1"/>
+    <joint name="openarm_left_finger_joint2"/>
+  </group>
+
+  <group name="right_hand">
+    <joint name="openarm_right_finger_joint1"/>
+    <joint name="openarm_right_finger_joint2"/>
+  </group>
+
+  <!-- End Effectors -->
+  <end_effector name="left_eef" parent_group="left_arm" parent_link="openarm_left_link7" group="left_hand"/>
+  <end_effector name="right_eef" parent_group="right_arm" parent_link="openarm_right_link7" group="right_hand"/>
+
+  <!-- Disabled Collisions -->
+  <disable_collisions link1="base" link2="openarm_left_link1" reason="Adjacent"/>
+  <disable_collisions link1="openarm_left_link1" link2="openarm_left_link2" reason="Adjacent"/>
+  <disable_collisions link1="openarm_left_link2" link2="openarm_left_link3" reason="Adjacent"/>
+  <disable_collisions link1="openarm_left_link3" link2="openarm_left_link4" reason="Adjacent"/>
+  <disable_collisions link1="openarm_left_link4" link2="openarm_left_link5" reason="Adjacent"/>
+  <disable_collisions link1="openarm_left_link5" link2="openarm_left_link6" reason="Adjacent"/>
+  <disable_collisions link1="openarm_left_link6" link2="openarm_left_link7" reason="Adjacent"/>
+
+  <disable_collisions link1="base" link2="openarm_right_link1" reason="Adjacent"/>
+  <disable_collisions link1="openarm_right_link1" link2="openarm_right_link2" reason="Adjacent"/>
+  <disable_collisions link1="openarm_right_link2" link2="openarm_right_link3" reason="Adjacent"/>
+  <disable_collisions link1="openarm_right_link3" link2="openarm_right_link4" reason="Adjacent"/>
+  <disable_collisions link1="openarm_right_link4" link2="openarm_right_link5" reason="Adjacent"/>
+  <disable_collisions link1="openarm_right_link5" link2="openarm_right_link6" reason="Adjacent"/>
+  <disable_collisions link1="openarm_right_link6" link2="openarm_right_link7" reason="Adjacent"/>
+
+  <!-- Virtual Joints -->
+  <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="base"/>
+
+  <!-- Planning Scene -->
+  <planning_scene>
+    <group_state name="home" group="left_arm">
+      <joint name="openarm_left_joint1" value="0.0"/>
+      <joint name="openarm_left_joint2" value="0.0"/>
+      <joint name="openarm_left_joint3" value="0.0"/>
+      <joint name="openarm_left_joint4" value="1.57"/>
+      <joint name="openarm_left_joint5" value="0.0"/>
+      <joint name="openarm_left_joint6" value="0.0"/>
+      <joint name="openarm_left_joint7" value="0.0"/>
+    </group_state>
+    <group_state name="home" group="right_arm">
+      <joint name="openarm_right_joint1" value="0.0"/>
+      <joint name="openarm_right_joint2" value="0.0"/>
+      <joint name="openarm_right_joint3" value="0.0"/>
+      <joint name="openarm_right_joint4" value="1.57"/>
+      <joint name="openarm_right_joint5" value="0.0"/>
+      <joint name="openarm_right_joint6" value="0.0"/>
+      <joint name="openarm_right_joint7" value="0.0"/>
+    </group_state>
+  </planning_scene>
+</robot>
+
