@@ -194,32 +194,4 @@
         </xacro:if>
 
   </xacro:macro>
-<link name="camera_link">
-    <visual>
-      <geometry>
-        <box size="0.05 0.03 0.03"/>
-      </geometry>
-      <material name="black">
-        <color rgba="0 0 0 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.05 0.03 0.03"/>
-      </geometry>
-    </collision>
-  </link>
-
-  <joint name="camera_joint" type="fixed">
-    <parent link="base_link"/> 
-    <child link="camera_link"/>
-    <origin xyz="0.5 0.0 0.8" rpy="0.0 1.57 0.0"/>
-  </joint>
-
-  <link name="camera_optical_frame"/>
-  <joint name="camera_optical_joint" type="fixed">
-    <parent link="camera_link"/>
-    <child link="camera_optical_frame"/>
-    <origin xyz="0 0 0" rpy="-1.57 0 -1.57"/>
-  </joint>
 </robot>

@@ -1,0 +1,373 @@
+planner_configs:
+  SBLkConfigDefault:
+    type: geometric::SBL
+    range: 0.0  # Max motion added to tree. ==> maxDistance_ between two states
+  ESTkConfigDefault:
+    type: geometric::EST
+    range: 0.0  # Max motion added to tree. ==> maxDistance_ between two states
+    goal_bias: 0.05  # When close to goal select goal, with this probability. [0,1]
+  LBKPIECEkConfigDefault:
+    type: geometric::LBKPIECE
+    range: 0.0  # Max motion added to tree. ==> maxDistance_ between two states
+    border_fraction: 0.9  # Fraction of time focused on boarder default value
+    min_valid_path_fraction: 0.2  # Accept partially valid moves above fraction. [0,1]
+  BKPIECEkConfigDefault:
+    type: geometric::BKPIECE
+    range: 0.0
+    border_fraction: 0.9
+    failed_expansion_score_factor: 0.5
+    min_valid_path_fraction: 0.2
+  KPIECEkConfigDefault:
+    type: geometric::KPIECE
+    range: 0.0
+    goal_bias: 0.05
+    border_fraction: 0.9
+    failed_expansion_score_factor: 0.5
+    min_valid_path_fraction: 0.2
+  RRTkConfigDefault:
+    type: geometric::RRT
+    range: 0.0  # Max motion added to tree. ==> maxDistance_ between two states
+    goal_bias: 0.05  # When close to goal select goal, with this probability. [0,1]
+  RRTConnectkConfigDefault:
+    type: geometric::RRTConnect
+    range: 0.0  # Max motion added to tree. ==> maxDistance_ between two states
+  RRTstarkConfigDefault:
+    type: geometric::RRTstar
+    range: 0.0  # Max motion added to tree. ==> maxDistance_ between two states
+    goal_bias: 0.05  # When close to goal select goal, with this probability. [0,1]
+    delay_collision_checking: 1  # Stop collision checking as soon as C-free parent found. [0,1]
+  TRRTkConfigDefault:
+    type: geometric::TRRT
+    range: 0.0
+    goal_bias: 0.05
+    max_states_failed: 200
+    temp_change_factor: 0.1
+    init_temperature: 100
+    fwd_weight: 1.0
+    no_goals: 0
+  PRMkConfigDefault:
+    type: geometric::PRM
+  PRMstarkConfigDefault:
+    type: geometric::PRMstar
+  FMTkConfigDefault:
+    type: geometric::FMT
+    num_samples: 1000
+    radius_multiplier: 1.1
+    nearest_k: 1
+  BFMTkConfigDefault:
+    type: geometric::BFMT
+    num_samples: 1000
+    radius_multiplier: 1.1
+    balanced: 0
+    heuristics: 0
+    nearest_k: 1
+  PDSTkConfigDefault:
+    type: geometric::PDST
+  STRIDEkConfigDefault:
+    type: geometric::STRIDE
+    range: 0.0
+    goal_bias: 0.05
+    use_projected_distance: 0
+    degree: 16
+    max_threads: 4
+  BiTRRTkConfigDefault:
+    type: geometric::BiTRRT
+    range: 0.0
+    temp_change_factor: 0.1
+    init_temperature: 100
+    fwd_weight: 1.0
+    no_goals: 0
+  LBTRRTkConfigDefault:
+    type: geometric::LBTRRT
+    range: 0.0
+    goal_bias: 0.05
+    epsilon: 0.4
+  BiESTkConfigDefault:
+    type: geometric::BiEST
+    range: 0.0
+  ProjESTkConfigDefault:
+    type: geometric::ProjEST
+    range: 0.0
+  LazyPRMkConfigDefault:
+    type: geometric::LazyPRM
+  LazyPRMstarkConfigDefault:
+    type: geometric::LazyPRMstar
+  LazyRRTkConfigDefault:
+    type: geometric::LazyRRT
+    range: 0.0
+  LazyLBTRRTkConfigDefault:
+    type: geometric::LazyLBTRRT
+    range: 0.0
+    goal_bias: 0.05
+    epsilon: 0.4
+  LazyTRRTkConfigDefault:
+    type: geometric::LazyTRRT
+    range: 0.0
+    goal_bias: 0.05
+    max_states_failed: 200
+    temp_change_factor: 0.1
+    init_temperature: 100
+    fwd_weight: 1.0
+    no_goals: 0
+  OptimizeDefault:
+    type: geometric::PathLengthOptimization
+    max_waypoints: 10
+  AnytimePathShorteningkConfigDefault:
+    type: geometric::AnytimePathShortening
+    range: 0.0
+    max_waypoints: 10
+    shortcut: 1
+    hybridize: 1
+    max_hybrid_paths: 24
+    num_splines: 0
+
+left_arm:
+  default_planner_config: RRTConnectkConfigDefault
+  planner_configs:
+    SBLkConfigDefault:
+      type: geometric::SBL
+      range: 0.0
+    ESTkConfigDefault:
+      type: geometric::EST
+      range: 0.0
+      goal_bias: 0.05
+    LBKPIECEkConfigDefault:
+      type: geometric::LBKPIECE
+      range: 0.0
+      border_fraction: 0.9
+      min_valid_path_fraction: 0.2
+    BKPIECEkConfigDefault:
+      type: geometric::BKPIECE
+      range: 0.0
+      border_fraction: 0.9
+      failed_expansion_score_factor: 0.5
+      min_valid_path_fraction: 0.2
+    KPIECEkConfigDefault:
+      type: geometric::KPIECE
+      range: 0.0
+      goal_bias: 0.05
+      border_fraction: 0.9
+      failed_expansion_score_factor: 0.5
+      min_valid_path_fraction: 0.2
+    RRTkConfigDefault:
+      type: geometric::RRT
+      range: 0.0
+      goal_bias: 0.05
+    RRTConnectkConfigDefault:
+      type: geometric::RRTConnect
+      range: 0.0
+    RRTstarkConfigDefault:
+      type: geometric::RRTstar
+      range: 0.0
+      goal_bias: 0.05
+      delay_collision_checking: 1
+    TRRTkConfigDefault:
+      type: geometric::TRRT
+      range: 0.0
+      goal_bias: 0.05
+      max_states_failed: 200
+      temp_change_factor: 0.1
+      init_temperature: 100
+      fwd_weight: 1.0
+      no_goals: 0
+    PRMkConfigDefault:
+      type: geometric::PRM
+    PRMstarkConfigDefault:
+      type: geometric::PRMstar
+    FMTkConfigDefault:
+      type: geometric::FMT
+      num_samples: 1000
+      radius_multiplier: 1.1
+      nearest_k: 1
+    BFMTkConfigDefault:
+      type: geometric::BFMT
+      num_samples: 1000
+      radius_multiplier: 1.1
+      balanced: 0
+      heuristics: 0
+      nearest_k: 1
+    PDSTkConfigDefault:
+      type: geometric::PDST
+    STRIDEkConfigDefault:
+      type: geometric::STRIDE
+      range: 0.0
+      goal_bias: 0.05
+      use_projected_distance: 0
+      degree: 16
+      max_threads: 4
+    BiTRRTkConfigDefault:
+      type: geometric::BiTRRT
+      range: 0.0
+      temp_change_factor: 0.1
+      init_temperature: 100
+      fwd_weight: 1.0
+      no_goals: 0
+    LBTRRTkConfigDefault:
+      type: geometric::LBTRRT
+      range: 0.0
+      goal_bias: 0.05
+      epsilon: 0.4
+    BiESTkConfigDefault:
+      type: geometric::BiEST
+      range: 0.0
+    ProjESTkConfigDefault:
+      type: geometric::ProjEST
+      range: 0.0
+    LazyPRMkConfigDefault:
+      type: geometric::LazyPRM
+    LazyPRMstarkConfigDefault:
+      type: geometric::LazyPRMstar
+    LazyRRTkConfigDefault:
+      type: geometric::LazyRRT
+      range: 0.0
+    LazyLBTRRTkConfigDefault:
+      type: geometric::LazyLBTRRT
+      range: 0.0
+      goal_bias: 0.05
+      epsilon: 0.4
+    LazyTRRTkConfigDefault:
+      type: geometric::LazyTRRT
+      range: 0.0
+      goal_bias: 0.05
+      max_states_failed: 200
+      temp_change_factor: 0.1
+      init_temperature: 100
+      fwd_weight: 1.0
+      no_goals: 0
+    OptimizeDefault:
+      type: geometric::PathLengthOptimization
+      max_waypoints: 10
+    AnytimePathShorteningkConfigDefault:
+      type: geometric::AnytimePathShortening
+      range: 0.0
+      max_waypoints: 10
+      shortcut: 1
+      hybridize: 1
+      max_hybrid_paths: 24
+      num_splines: 0
+
+right_arm:
+  default_planner_config: RRTConnectkConfigDefault
+  planner_configs:
+    SBLkConfigDefault:
+      type: geometric::SBL
+      range: 0.0
+    ESTkConfigDefault:
+      type: geometric::EST
+      range: 0.0
+      goal_bias: 0.05
+    LBKPIECEkConfigDefault:
+      type: geometric::LBKPIECE
+      range: 0.0
+      border_fraction: 0.9
+      min_valid_path_fraction: 0.2
+    BKPIECEkConfigDefault:
+      type: geometric::BKPIECE
+      range: 0.0
+      border_fraction: 0.9
+      failed_expansion_score_factor: 0.5
+      min_valid_path_fraction: 0.2
+    KPIECEkConfigDefault:
+      type: geometric::KPIECE
+      range: 0.0
+      goal_bias: 0.05
+      border_fraction: 0.9
+      failed_expansion_score_factor: 0.5
+      min_valid_path_fraction: 0.2
+    RRTkConfigDefault:
+      type: geometric::RRT
+      range: 0.0
+      goal_bias: 0.05
+    RRTConnectkConfigDefault:
+      type: geometric::RRTConnect
+      range: 0.0
+    RRTstarkConfigDefault:
+      type: geometric::RRTstar
+      range: 0.0
+      goal_bias: 0.05
+      delay_collision_checking: 1
+    TRRTkConfigDefault:
+      type: geometric::TRRT
+      range: 0.0
+      goal_bias: 0.05
+      max_states_failed: 200
+      temp_change_factor: 0.1
+      init_temperature: 100
+      fwd_weight: 1.0
+      no_goals: 0
+    PRMkConfigDefault:
+      type: geometric::PRM
+    PRMstarkConfigDefault:
+      type: geometric::PRMstar
+    FMTkConfigDefault:
+      type: geometric::FMT
+      num_samples: 1000
+      radius_multiplier: 1.1
+      nearest_k: 1
+    BFMTkConfigDefault:
+      type: geometric::BFMT
+      num_samples: 1000
+      radius_multiplier: 1.1
+      balanced: 0
+      heuristics: 0
+      nearest_k: 1
+    PDSTkConfigDefault:
+      type: geometric::PDST
+    STRIDEkConfigDefault:
+      type: geometric::STRIDE
+      range: 0.0
+      goal_bias: 0.05
+      use_projected_distance: 0
+      degree: 16
+      max_threads: 4
+    BiTRRTkConfigDefault:
+      type: geometric::BiTRRT
+      range: 0.0
+      temp_change_factor: 0.1
+      init_temperature: 100
+      fwd_weight: 1.0
+      no_goals: 0
+    LBTRRTkConfigDefault:
+      type: geometric::LBTRRT
+      range: 0.0
+      goal_bias: 0.05
+      epsilon: 0.4
+    BiESTkConfigDefault:
+      type: geometric::BiEST
+      range: 0.0
+    ProjESTkConfigDefault:
+      type: geometric::ProjEST
+      range: 0.0
+    LazyPRMkConfigDefault:
+      type: geometric::LazyPRM
+    LazyPRMstarkConfigDefault:
+      type: geometric::LazyPRMstar
+    LazyRRTkConfigDefault:
+      type: geometric::LazyRRT
+      range: 0.0
+    LazyLBTRRTkConfigDefault:
+      type: geometric::LazyLBTRRT
+      range: 0.0
+      goal_bias: 0.05
+      epsilon: 0.4
+    LazyTRRTkConfigDefault:
+      type: geometric::LazyTRRT
+      range: 0.0
+      goal_bias: 0.05
+      max_states_failed: 200
+      temp_change_factor: 0.1
+      init_temperature: 100
+      fwd_weight: 1.0
+      no_goals: 0
+    OptimizeDefault:
+      type: geometric::PathLengthOptimization
+      max_waypoints: 10
+    AnytimePathShorteningkConfigDefault:
+      type: geometric::AnytimePathShortening
+      range: 0.0
+      max_waypoints: 10
+      shortcut: 1
+      hybridize: 1
+      max_hybrid_paths: 24
+      num_splines: 0
+

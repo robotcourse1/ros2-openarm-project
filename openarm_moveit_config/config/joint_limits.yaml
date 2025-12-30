@@ -1,0 +1,162 @@
+# Saturation limits
+# The limits in this file are applied on top of the joint limits specified in the URDF
+# (or in a separate joint_limits.yaml file loaded earlier).
+# These limits should be at least as restrictive as the URDF limits.
+# If a joint limit is not specified here, the URDF limit is used.
+
+joint_limits:
+  openarm_left_joint1:
+    has_velocity_limits: true
+    max_velocity: 16.754666
+    has_acceleration_limits: true
+    max_acceleration: 8.377333
+    has_jerk_limits: true
+    max_jerk: 41.886665
+    has_effort_limits: true
+    max_effort: 40.0
+  openarm_left_joint2:
+    has_velocity_limits: true
+    max_velocity: 16.754666
+    has_acceleration_limits: true
+    max_acceleration: 8.377333
+    has_jerk_limits: true
+    max_jerk: 41.886665
+    has_effort_limits: true
+    max_effort: 40.0
+  openarm_left_joint3:
+    has_velocity_limits: true
+    max_velocity: 5.445426
+    has_acceleration_limits: true
+    max_acceleration: 2.722713
+    has_jerk_limits: true
+    max_jerk: 13.613565
+    has_effort_limits: true
+    max_effort: 27.0
+  openarm_left_joint4:
+    has_velocity_limits: true
+    max_velocity: 5.445426
+    has_acceleration_limits: true
+    max_acceleration: 2.722713
+    has_jerk_limits: true
+    max_jerk: 13.613565
+    has_effort_limits: true
+    max_effort: 27.0
+  openarm_left_joint5:
+    has_velocity_limits: true
+    max_velocity: 20.943946
+    has_acceleration_limits: true
+    max_acceleration: 10.471973
+    has_jerk_limits: true
+    max_jerk: 52.359865
+    has_effort_limits: true
+    max_effort: 7.0
+  openarm_left_joint6:
+    has_velocity_limits: true
+    max_velocity: 20.943946
+    has_acceleration_limits: true
+    max_acceleration: 10.471973
+    has_jerk_limits: true
+    max_jerk: 52.359865
+    has_effort_limits: true
+    max_effort: 7.0
+  openarm_left_joint7:
+    has_velocity_limits: true
+    max_velocity: 20.943946
+    has_acceleration_limits: true
+    max_acceleration: 10.471973
+    has_jerk_limits: true
+    max_jerk: 52.359865
+    has_effort_limits: true
+    max_effort: 7.0
+  openarm_right_joint1:
+    has_velocity_limits: true
+    max_velocity: 16.754666
+    has_acceleration_limits: true
+    max_acceleration: 8.377333
+    has_jerk_limits: true
+    max_jerk: 41.886665
+    has_effort_limits: true
+    max_effort: 40.0
+  openarm_right_joint2:
+    has_velocity_limits: true
+    max_velocity: 16.754666
+    has_acceleration_limits: true
+    max_acceleration: 8.377333
+    has_jerk_limits: true
+    max_jerk: 41.886665
+    has_effort_limits: true
+    max_effort: 40.0
+  openarm_right_joint3:
+    has_velocity_limits: true
+    max_velocity: 5.445426
+    has_acceleration_limits: true
+    max_acceleration: 2.722713
+    has_jerk_limits: true
+    max_jerk: 13.613565
+    has_effort_limits: true
+    max_effort: 27.0
+  openarm_right_joint4:
+    has_velocity_limits: true
+    max_velocity: 5.445426
+    has_acceleration_limits: true
+    max_acceleration: 2.722713
+    has_jerk_limits: true
+    max_jerk: 13.613565
+    has_effort_limits: true
+    max_effort: 27.0
+  openarm_right_joint5:
+    has_velocity_limits: true
+    max_velocity: 20.943946
+    has_acceleration_limits: true
+    max_acceleration: 10.471973
+    has_jerk_limits: true
+    max_jerk: 52.359865
+    has_effort_limits: true
+    max_effort: 7.0
+  openarm_right_joint6:
+    has_velocity_limits: true
+    max_velocity: 20.943946
+    has_acceleration_limits: true
+    max_acceleration: 10.471973
+    has_jerk_limits: true
+    max_jerk: 52.359865
+    has_effort_limits: true
+    max_effort: 7.0
+  openarm_right_joint7:
+    has_velocity_limits: true
+    max_velocity: 20.943946
+    has_acceleration_limits: true
+    max_acceleration: 10.471973
+    has_jerk_limits: true
+    max_jerk: 52.359865
+    has_effort_limits: true
+    max_effort: 7.0
+  openarm_left_finger_joint1:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 50.0
+    has_effort_limits: true
+    max_effort: 100.0
+  openarm_left_finger_joint2:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 50.0
+    has_effort_limits: true
+    max_effort: 100.0
+  openarm_right_finger_joint1:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 50.0
+    has_effort_limits: true
+    max_effort: 100.0
+  openarm_right_finger_joint2:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 50.0
+    has_effort_limits: true
+    max_effort: 100.0
+

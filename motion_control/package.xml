@@ -3,9 +3,20 @@
 <package format="3">
   <name>motion_control</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="2824949924@qq.com">ljh</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Motion planning and control package for openarm robot using MoveIt2</description>
+  <maintainer email="member_c@example.com">member_c</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>control_msgs</depend>
+  <depend>trajectory_msgs</depend>
+  <depend>moveit_msgs</depend>
+  <depend>sensor_msgs</depend>
+  
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-matplotlib</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
