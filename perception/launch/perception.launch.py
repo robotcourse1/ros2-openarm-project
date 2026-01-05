@@ -5,8 +5,9 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='perception',
-            executable='vision_node',
+            executable='object_detector', # 这里要和 setup.py 里的 console_scripts 名字一致
             name='vision_node',
-            output='screen'
-        )
+            output='screen',
+            emulate_tty=True
+        ),
     ])

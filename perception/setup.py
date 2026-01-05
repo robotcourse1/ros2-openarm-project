@@ -12,22 +12,22 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        # 下面这一行就是刚才容易出错的地方，现在已经修复了
+        # 任务 2 的铺垫：安装 launch 文件
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Member B',
     maintainer_email='member_b@example.com',
-    description='Perception package for OpenArm',
+    description='Perception module for OpenArm',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            # 注册视觉节点
-            'vision_node = perception.object_detector:main',
-            # 注册标定节点 (如果有)
-            'calibration_node = calibration.calibration_script:main',
+            # 任务 1：注册核心节点
+            'object_detector = perception.object_detector:main',
+            # 如果你有 minimal.py 也可以加，没有就注释掉
+            # 'minimal = perception.minimal:main', 
         ],
     },
 )
