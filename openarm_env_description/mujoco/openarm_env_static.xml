@@ -65,6 +65,12 @@
     <mesh name="right_link5_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link5.stl" scale="0.001 0.001 0.001"/>
     <mesh name="right_link6_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link6.stl" scale="0.001 0.001 0.001"/>
     <mesh name="right_link7_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link7.stl" scale="0.001 0.001 0.001"/>
+    
+    <!-- Hand/Gripper meshes -->
+    <mesh name="left_hand_mesh"   file="../../openarm_description/share/openarm_description/meshes/ee/openarm_hand/collision/hand.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_hand_mesh"  file="../../openarm_description/share/openarm_description/meshes/ee/openarm_hand/collision/hand.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="left_finger_mesh"  file="../../openarm_description/share/openarm_description/meshes/ee/openarm_hand/collision/finger.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_finger_mesh" file="../../openarm_description/share/openarm_description/meshes/ee/openarm_hand/collision/finger.stl" scale="0.001 -0.001 0.001"/>
   </asset>
 
   <worldbody>
@@ -177,11 +183,31 @@
                             pos="0 0 -0.5585"
                             density="2000" friction="1.0 0.01 0.01"/>
 
-                      <!-- Simple tool frame at the end of link7 -->
-                      <body name="openarm_left_tool" pos="0 0 0.10">
-                        <geom class="robot" name="openarm_left_tool_geom" type="box"
-                              size="0.03 0.03 0.02"
+                      <!-- Hand/Gripper at the end of link7 -->
+                      <body name="openarm_left_hand" pos="0 0 0.1001">
+                        <geom class="robot" name="openarm_left_hand_geom" type="mesh" mesh="left_hand_mesh" pos="0 0 -0.6585"
                               material="robot_mat" density="2000" friction="1.0 0.01 0.01"/>
+                        
+                        <!-- Left finger (opens to +Y) -->
+                        <body name="openarm_left_left_finger" pos="0 0.006 0.015">
+                          <joint name="openarm_left_finger_joint2" type="slide"
+                                 axis="0 1 0" limited="true"
+                                 range="0.0 0.044" damping="0.1" springref="0.044" />
+                          <geom class="robot" name="openarm_left_left_finger_geom" type="mesh" mesh="left_finger_mesh" pos="0 -0.05 -0.673001"
+                                material="robot_mat" density="1000" friction="1.0 0.5 0.01"/>
+                        </body>
+                        
+                        <!-- Right finger (opens to -Y) -->
+                        <body name="openarm_left_right_finger" pos="0 -0.006 0.015">
+                          <joint name="openarm_left_finger_joint1" type="slide"
+                                 axis="0 -1 0" limited="true"
+                                 range="0.0 0.044" damping="0.1" springref="0.044" />
+                          <geom class="robot" name="openarm_left_right_finger_geom" type="mesh" mesh="right_finger_mesh" pos="0 0.05 -0.673001"
+                                material="robot_mat" density="1000" friction="1.0 0.5 0.01"/>
+                        </body>
+                        
+                        <!-- TCP frame -->
+                        <body name="openarm_left_hand_tcp" pos="0 0 0.08"/>
                       </body>
                     </body>
                   </body>
@@ -268,11 +294,31 @@
                             pos="0 0 -0.5585"
                             density="2000" friction="1.0 0.01 0.01"/>
 
-                      <!-- Simple tool frame at the end of link7 -->
-                      <body name="openarm_right_tool" pos="0 0 0.10">
-                      <geom class="robot" name="openarm_right_tool_geom" type="box"
-                              size="0.03 0.03 0.02"
+                      <!-- Hand/Gripper at the end of link7 -->
+                      <body name="openarm_right_hand" pos="0 0 0.1001">
+                        <geom class="robot" name="openarm_right_hand_geom" type="mesh" mesh="right_hand_mesh" pos="0 0 -0.6585"
                               material="robot_mat" density="2000" friction="1.0 0.01 0.01"/>
+                        
+                        <!-- Left finger (opens to +Y) -->
+                        <body name="openarm_right_left_finger" pos="0 0.006 0.015">
+                          <joint name="openarm_right_finger_joint2" type="slide"
+                                 axis="0 1 0" limited="true"
+                                 range="0.0 0.044" damping="0.1" springref="0.044" />
+                          <geom class="robot" name="openarm_right_left_finger_geom" type="mesh" mesh="left_finger_mesh" pos="0 -0.05 -0.673001"
+                                material="robot_mat" density="1000" friction="1.0 0.5 0.01"/>
+                        </body>
+                        
+                        <!-- Right finger (opens to -Y) -->
+                        <body name="openarm_right_right_finger" pos="0 -0.006 0.015">
+                          <joint name="openarm_right_finger_joint1" type="slide"
+                                 axis="0 -1 0" limited="true"
+                                 range="0.0 0.044" damping="0.1" springref="0.044" />
+                          <geom class="robot" name="openarm_right_right_finger_geom" type="mesh" mesh="right_finger_mesh" pos="0 0.05 -0.673001"
+                                material="robot_mat" density="1000" friction="1.0 0.5 0.01"/>
+                        </body>
+                        
+                        <!-- TCP frame -->
+                        <body name="openarm_right_hand_tcp" pos="0 0 0.08"/>
                       </body>
                     </body>
                   </body>
@@ -319,6 +365,12 @@
     <position name="pos_openarm_right_joint5" joint="openarm_right_joint5" kp="200" kv="20" ctrlrange="-1.570796 1.570796"/>
     <position name="pos_openarm_right_joint6" joint="openarm_right_joint6" kp="150" kv="15" ctrlrange="-0.785398 0.785398"/>
     <position name="pos_openarm_right_joint7" joint="openarm_right_joint7" kp="150" kv="15" ctrlrange="-1.570796 1.570796"/>
+  
+    <!-- Grippers -->
+    <position name="pos_openarm_left_finger_joint2" joint="openarm_left_finger_joint2" kp="100" kv="10" ctrlrange="0 0.044" />
+    <position name="pos_openarm_left_finger_joint1" joint="openarm_left_finger_joint1" kp="100" kv="10" ctrlrange="0 0.044" />
+    <position name="pos_openarm_right_finger_joint2" joint="openarm_right_finger_joint2" kp="100" kv="10" ctrlrange="0 0.044" />
+    <position name="pos_openarm_right_finger_joint1" joint="openarm_right_finger_joint1" kp="100" kv="10" ctrlrange="0 0.044" />
   </actuator>
 </mujoco>
 

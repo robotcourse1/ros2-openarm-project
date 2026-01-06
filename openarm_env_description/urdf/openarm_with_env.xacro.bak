@@ -8,14 +8,6 @@
   <xacro:include filename="$(find openarm_env_description)/urdf/banana.xacro"/>
   <xacro:include filename="$(find openarm_env_description)/urdf/camera_macro.xacro"/>
 
-  <!-- Hand/End-effector arguments -->
-  <xacro:arg name="special_connection" default="" />
-  <xacro:arg name="xyz_ee" default="0 0 0.1001" />
-  <xacro:arg name="rpy_ee" default="0 0 0" />
-  <xacro:arg name="tcp_xyz" default="0 0 0.08" />
-  <xacro:arg name="tcp_rpy" default="0 0 0" />
-  <xacro:arg name="description_pkg" default="openarm_description" />
-
   <!-- World link - must be defined before robot and table -->
   <link name="world"/>
 

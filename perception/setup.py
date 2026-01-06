@@ -19,10 +19,10 @@ setup(
     maintainer_email='you@example.com',
     description='TODO: Package description',
     license='TODO: License declaration',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'minimal = perception.minimal:main',
+            'real_object_detector = perception.real_object_detector:main',
         ],
     },
 )

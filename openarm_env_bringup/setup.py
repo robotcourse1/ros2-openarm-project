@@ -25,7 +25,6 @@ setup(
     maintainer_email='you@example.com',
     description='Bringup for OpenArm environment with table/fruits/camera',
     license='Apache-2.0',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'mujoco_ros_bridge = openarm_env_bringup.mujoco_ros_bridge:main',

@@ -20,7 +20,6 @@ setup(
     maintainer_email='member_c@example.com',
     description='Motion planning and control package for openarm robot',
     license='MIT',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'minimal = motion_control.minimal:main',

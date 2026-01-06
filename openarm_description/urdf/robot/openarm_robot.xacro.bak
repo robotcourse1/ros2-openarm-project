@@ -111,7 +111,7 @@
             hand="${hand}"/>
         </xacro:if>
 
-        <xacro:if value="${hand}">
+        <xacro:if value="$(eval '${hand}' == 'true' and '${ee_type}' == 'openarm_hand')">
             <xacro:openarm_hand
                 connected_to="openarm_left_link7"
                 arm_type="${arm_type}"
@@ -175,7 +175,7 @@
         <!-- <xacro:property name="connection" value="${special_connection if special_connection != '' else arm_type + '_link7'}" /> -->
         <xacro:property name="connection" value="${special_connection if special_connection != '' else 'openarm' + '_link7'}" />
 
-        <xacro:if value="${hand}">
+        <xacro:if value="$(eval '${hand}' == 'true' and '${ee_type}' == 'openarm_hand')">
         <xacro:openarm_hand
             connected_to="${arm_prefix_modified}${connection}"
             arm_type="${arm_type}"
