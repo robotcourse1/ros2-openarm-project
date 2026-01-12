@@ -17,12 +17,13 @@ setup(
     zip_safe=True,
     maintainer='your_name',
     maintainer_email='you@example.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='Vision perception for OpenArm',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'minimal = perception.minimal:main',
+            'object_detector = perception.object_detector:main',
         ],
     },
 )

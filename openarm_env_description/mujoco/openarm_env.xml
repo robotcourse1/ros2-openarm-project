@@ -1,6 +1,15 @@
 <mujoco model="openarm_env">
   <compiler angle="radian" coordinate="local" inertiafromgeom="true"/>
-  <option gravity="0 0 -9.81" timestep="0.001"/>
+
+  <!-- More stable integration settings -->
+  <option gravity="0 0 -9.81" timestep="0.001" integrator="implicitfast"/>
+
+  <!-- Add numerical stability settings (contacts + solver) -->
+  <option solver="Newton" iterations="100" tolerance="1e-10"/>
+  <size njmax="8000" nconmax="4000"/>
+
+  <!-- Contact model tuning to reduce explosive impulses -->
+  <option cone="elliptic" impratio="10"/>
 
   <!-- Defaults
     - Give robot parts a consistent material (fixes "blue parts" look).
@@ -14,14 +23,15 @@
          props: contype=4, conaffinity=3 (collide with robot=1 and table=2)
     -->
     <default class="robot">
-      <geom material="robot_mat" contype="1" conaffinity="6"/>
-      <joint stiffness="60" springref="0" frictionloss="0.05" armature="0.01"/>
+      <geom material="robot_mat" contype="1" conaffinity="6" solref="0.02 1" solimp="0.9 0.95 0.001"/>
+      <!-- Tune joint damping/armature for stability (avoid NaNs with stiff position actuators) -->
+      <joint stiffness="0" springref="0" frictionloss="0.2" damping="3.0" armature="0.05"/>
     </default>
     <default class="table">
-      <geom contype="2" conaffinity="5"/>
+      <geom contype="2" conaffinity="5" solref="0.02 1" solimp="0.9 0.95 0.001"/>
     </default>
     <default class="prop">
-      <geom contype="4" conaffinity="3"/>
+      <geom contype="4" conaffinity="3" solref="0.02 1" solimp="0.9 0.95 0.001"/>
     </default>
   </default>
 
@@ -37,26 +47,26 @@
          Meshes are at: install/openarm_description/share/openarm_description/meshes/
          Relative path: ../../openarm_description/share/openarm_description/meshes/
          Left arm meshes are mirrored on Y (scale y = -0.001) to match URDF reflect. -->
-    <mesh name="body_link0_mesh"   file="../../openarm_description/share/openarm_description/meshes/body/v10/visual/body_link0.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="body_link0_mesh"   file="../../openarm_description/meshes/body/v10/visual/body_link0.stl" scale="0.001 0.001 0.001"/>
 
-    <mesh name="left_link0_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link0.stl" scale="0.001 -0.001 0.001"/>
-    <mesh name="left_link1_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link1.stl" scale="0.001 -0.001 0.001"/>
-    <mesh name="left_link2_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link2.stl" scale="0.001 -0.001 0.001"/>
-    <mesh name="left_link3_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link3.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link0_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link0.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link1_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link1.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link2_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link2.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link3_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link3.stl" scale="0.001 -0.001 0.001"/>
     <!-- link4 is NOT mirrored in URDF -->
-    <mesh name="left_link4_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link4.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="left_link5_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link5.stl" scale="0.001 -0.001 0.001"/>
-    <mesh name="left_link6_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link6.stl" scale="0.001 -0.001 0.001"/>
-    <mesh name="left_link7_mesh"   file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link7.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link4_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link4.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="left_link5_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link5.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link6_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link6.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="left_link7_mesh"   file="../../openarm_description/meshes/arm/v10/visual/link7.stl" scale="0.001 -0.001 0.001"/>
 
-    <mesh name="right_link0_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link0.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_link1_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link1.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_link2_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link2.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_link3_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link3.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_link4_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link4.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_link5_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link5.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_link6_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link6.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_link7_mesh"  file="../../openarm_description/share/openarm_description/meshes/arm/v10/visual/link7.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link0_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link0.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link1_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link2_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link2.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link3_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link3.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link4_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link4.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link5_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link5.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link6_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link6.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_link7_mesh"  file="../../openarm_description/meshes/arm/v10/visual/link7.stl" scale="0.001 0.001 0.001"/>
   </asset>
 
   <worldbody>
@@ -169,11 +179,32 @@
                             pos="0 0 -0.5585"
                             density="2000" friction="1.0 0.01 0.01"/>
 
-                      <!-- Simple tool frame at the end of link7 -->
-                      <body name="openarm_left_tool" pos="0 0 0.10">
-                        <geom class="robot" name="openarm_left_tool_geom" type="box"
-                              size="0.03 0.03 0.02"
-                              material="robot_mat" density="2000" friction="1.0 0.01 0.01"/>
+                      <!-- 左臂夹爪 - 平行夹爪 -->
+                      <body name="openarm_left_gripper_base" pos="0 0 0.08">
+                        <!-- 夹爪底座 -->
+                        <geom class="robot" name="left_gripper_base_geom" type="box"
+                              size="0.02 0.015 0.03"
+                              material="robot_mat" density="1000" friction="1.0 0.01 0.01"/>
+                        
+                        <!-- 左手指 -->
+                        <body name="openarm_left_finger_left" pos="0 -0.02 0.02">
+                          <joint name="openarm_left_gripper_joint" type="slide"
+                                 axis="0 1 0" limited="true"
+                                 range="0 0.04" damping="5.0"/>
+                          <geom class="robot" name="left_finger_left_geom" type="box"
+                                size="0.008 0.015 0.025"
+                                rgba="0.2 0.6 0.2 1.0" density="500" friction="2.0 0.1 0.1"/>
+                        </body>
+                        
+                        <!-- 右手指（镜像） -->
+                        <body name="openarm_left_finger_right" pos="0 0.02 0.02">
+                          <joint name="openarm_left_gripper_joint_mirror" type="slide"
+                                 axis="0 -1 0" limited="true"
+                                 range="0 0.04" damping="5.0"/>
+                          <geom class="robot" name="left_finger_right_geom" type="box"
+                                size="0.008 0.015 0.025"
+                                rgba="0.2 0.6 0.2 1.0" density="500" friction="2.0 0.1 0.1"/>
+                        </body>
                       </body>
                     </body>
                   </body>
@@ -256,15 +287,36 @@
                       <joint name="openarm_right_joint7" type="hinge"
                              axis="0 1 0" limited="true"
                              range="-1.570796 1.570796" damping="0.5"/>
-                    <geom class="robot" name="openarm_right_link7_geom" type="mesh" mesh="right_link7_mesh"
+                      <geom class="robot" name="openarm_right_link7_geom" type="mesh" mesh="right_link7_mesh"
                             pos="0 0 -0.5585"
                             density="2000" friction="1.0 0.01 0.01"/>
 
-                      <!-- Simple tool frame at the end of link7 -->
-                      <body name="openarm_right_tool" pos="0 0 0.10">
-                      <geom class="robot" name="openarm_right_tool_geom" type="box"
-                              size="0.03 0.03 0.02"
-                              material="robot_mat" density="2000" friction="1.0 0.01 0.01"/>
+                      <!-- 右臂夹爪 - 平行夹爪 -->
+                      <body name="openarm_right_gripper_base" pos="0 0 0.08">
+                        <!-- 夹爪底座 -->
+                        <geom class="robot" name="right_gripper_base_geom" type="box"
+                              size="0.02 0.015 0.03"
+                              material="robot_mat" density="1000" friction="1.0 0.01 0.01"/>
+                        
+                        <!-- 左手指 -->
+                        <body name="openarm_right_finger_left" pos="0 -0.02 0.02">
+                          <joint name="openarm_right_gripper_joint" type="slide"
+                                 axis="0 1 0" limited="true"
+                                 range="0 0.04" damping="5.0"/>
+                          <geom class="robot" name="right_finger_left_geom" type="box"
+                                size="0.008 0.015 0.025"
+                                rgba="0.2 0.6 0.2 1.0" density="500" friction="2.0 0.1 0.1"/>
+                        </body>
+                        
+                        <!-- 右手指（镜像） -->
+                        <body name="openarm_right_finger_right" pos="0 0.02 0.02">
+                          <joint name="openarm_right_gripper_joint_mirror" type="slide"
+                                 axis="0 -1 0" limited="true"
+                                 range="0 0.04" damping="5.0"/>
+                          <geom class="robot" name="right_finger_right_geom" type="box"
+                                size="0.008 0.015 0.025"
+                                rgba="0.2 0.6 0.2 1.0" density="500" friction="2.0 0.1 0.1"/>
+                        </body>
                       </body>
                     </body>
                   </body>
@@ -279,16 +331,48 @@
     <!-- Table: center at z=0.375 so top is at z=0.75 (matches URDF height 0.75) -->
     <body name="table" pos="0.8 0 0.375">
       <geom class="table" name="table_geom" type="box" size="0.5 0.3 0.375" material="table_mat" density="700" friction="1.0 0.01 0.01"/>
+    </body>
 
-      <!-- Apple at table top (relative offset to table) -->
-      <body name="apple" pos="0.15 -0.05 0.415">
-        <geom class="prop" name="apple_geom" type="sphere" size="0.04" material="apple_mat" density="800" friction="0.9 0.01 0.01"/>
-      </body>
+    <!-- Apple at table top - 可移动物体（自由关节）
+         把苹果放得更靠近机器人基座 -->
+    <body name="apple" pos="0.85 -0.15 0.79">
+      <freejoint name="apple_free"/>
+      <geom class="prop" name="apple_geom" type="sphere" size="0.04" material="apple_mat" density="800" friction="1.0 0.05 0.05"/>
+    </body>
 
-      <!-- Banana at table top (relative offset to table) -->
-      <body name="banana" pos="-0.15 -0.05 0.395">
-        <geom class="prop" name="banana_geom" type="capsule" fromto="-0.08 0 0 0.08 0 0" size="0.02" material="banana_mat" density="600" friction="0.9 0.01 0.01"/>
-      </body>
+    <!-- Banana at table top - 可移动物体（自由关节） -->
+    <body name="banana" pos="0.75 -0.15 0.79">
+      <freejoint name="banana_free"/>
+      <geom class="prop" name="banana_geom" type="capsule" fromto="-0.05 0 0 0.05 0 0" size="0.025" material="banana_mat" density="600" friction="1.0 0.05 0.05"/>
     </body>
   </worldbody>
+
+  <!-- Actuators for joint control -->
+  <actuator>
+    <!-- 改用位置执行器代替力矩执行器 -->
+    <!-- 降低 KP 值以防止震荡 -->
+    <!-- Left arm actuators (reduced gains for stability) -->
+    <position name="left_motor1" joint="openarm_left_joint1" kp="120" kv="12" ctrlrange="-3.490659 1.396263"/>
+    <position name="left_motor2" joint="openarm_left_joint2" kp="120" kv="12" ctrlrange="-3.3161253267948965 0.17453267320510335"/>
+    <position name="left_motor3" joint="openarm_left_joint3" kp="100" kv="10" ctrlrange="-1.570796 1.570796"/>
+    <position name="left_motor4" joint="openarm_left_joint4" kp="100" kv="10" ctrlrange="0.0 2.443461"/>
+    <position name="left_motor5" joint="openarm_left_joint5" kp="80" kv="8" ctrlrange="-1.570796 1.570796"/>
+    <position name="left_motor6" joint="openarm_left_joint6" kp="60" kv="6" ctrlrange="-0.785398 0.785398"/>
+    <position name="left_motor7" joint="openarm_left_joint7" kp="60" kv="6" ctrlrange="-1.570796 1.570796"/>
+
+    <!-- Right arm actuators (reduced gains for stability) -->
+    <position name="right_motor1" joint="openarm_right_joint1" kp="120" kv="12" ctrlrange="-1.396263 3.490659"/>
+    <position name="right_motor2" joint="openarm_right_joint2" kp="120" kv="12" ctrlrange="-0.17453267320510335 3.3161253267948965"/>
+    <position name="right_motor3" joint="openarm_right_joint3" kp="100" kv="10" ctrlrange="-1.570796 1.570796"/>
+    <position name="right_motor4" joint="openarm_right_joint4" kp="100" kv="10" ctrlrange="0.0 2.443461"/>
+    <position name="right_motor5" joint="openarm_right_joint5" kp="80" kv="8" ctrlrange="-1.570796 1.570796"/>
+    <position name="right_motor6" joint="openarm_right_joint6" kp="60" kv="6" ctrlrange="-0.785398 0.785398"/>
+    <position name="right_motor7" joint="openarm_right_joint7" kp="60" kv="6" ctrlrange="-1.570796 1.570796"/>
+
+    <!-- Gripper actuators (slightly reduced gains) -->
+    <position name="left_gripper_main" joint="openarm_left_gripper_joint" kp="60" kv="6" ctrlrange="0 0.04"/>
+    <position name="left_gripper_mirror" joint="openarm_left_gripper_joint_mirror" kp="60" kv="6" ctrlrange="0 0.04"/>
+    <position name="right_gripper_main" joint="openarm_right_gripper_joint" kp="60" kv="6" ctrlrange="0 0.04"/>
+    <position name="right_gripper_mirror" joint="openarm_right_gripper_joint_mirror" kp="60" kv="6" ctrlrange="0 0.04"/>
+  </actuator>
 </mujoco>

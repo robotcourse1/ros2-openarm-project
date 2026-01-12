@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
@@ -24,24 +24,22 @@ def _launch_setup(context, *args, **kwargs):
             [FindPackageShare("openarm_env_description"), "mujoco", "openarm_env.xml"]
         ).perform(context)
 
-    viewer_script = PathJoinSubstitution(
-        [FindPackageShare("openarm_env_bringup"), "scripts", "view_mujoco_env.py"]
-    ).perform(context)
-
-    run_viewer = ExecuteProcess(
-        cmd=["python3", viewer_script, xml_path],
-        output="screen",
-    )
-
+    # 只使用 mujoco_ros_bridge 的内置可视化窗口，不再启动独立的 viewer
     mujoco_bridge = Node(
         package="openarm_env_bringup",
         executable="mujoco_ros_bridge",
         name="mujoco_ros_bridge",
         output="screen",
-        parameters=[{"xml": xml_path}],
+        parameters=[{
+            "xml": xml_path,
+            "enable_viewer": True,
+            "drive_gripper": True,  # 启用夹爪控制
+            "arm_command_alpha": 0.25,
+            "arm_max_step": 0.10,
+        }],
     )
 
-    return [run_viewer, mujoco_bridge]
+    return [mujoco_bridge]
 
 
 def generate_launch_description():
