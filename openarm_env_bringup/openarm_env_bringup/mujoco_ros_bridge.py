@@ -84,8 +84,8 @@ class MujocoRosBridge(Node):
         self.declare_parameter("enable_viewer", True)
 
         # Control smoothing / stability knobs
-        self.declare_parameter("arm_command_alpha", 0.25)  # 0..1, higher = follow commands faster
-        self.declare_parameter("arm_max_step", 0.10)  # rad / update (100Hz)
+        self.declare_parameter("arm_command_alpha", 0.08)  # 0..1, higher = follow commands faster (降低以获得更平滑运动)
+        self.declare_parameter("arm_max_step", 0.02)  # rad / update (100Hz) (降低以限制最大速度)
         self.declare_parameter("arm_hold_initial_pose", True)
 
         # Allow disabling gripper actuation from the bridge to avoid conflicts

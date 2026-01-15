@@ -116,10 +116,10 @@
   <xacro:macro name="openarm-kinematics" params="name config offset:=none reflect:=1">
     <xacro:property name="kinematics" value="${config[name]['kinematic']}" lazy_eval="false" />
     <xacro:if value="${offset != 'none'}">
-      <xacro:property name="offset" value="${offset[name]['kinematic_offset']}" lazy_eval="false" />
+      <xacro:property name="joint_offset" value="${offset[name]['kinematic_offset']}" lazy_eval="false" />
       <origin
-        xyz="${kinematics.x + offset.x} ${kinematics.y + offset.y} ${kinematics.z + offset.z}"
-        rpy="${reflect*(kinematics.roll + offset.roll)} ${reflect*(kinematics.pitch + offset.pitch)} ${reflect*(kinematics.yaw + offset.yaw)}" />
+        xyz="${kinematics.x + joint_offset.x} ${kinematics.y + joint_offset.y} ${kinematics.z + joint_offset.z}"
+        rpy="${reflect*(kinematics.roll + joint_offset.roll)} ${reflect*(kinematics.pitch + joint_offset.pitch)} ${reflect*(kinematics.yaw + joint_offset.yaw)}" />
     </xacro:if>
     <xacro:unless value="${offset != 'none'}">
       <origin

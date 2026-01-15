@@ -5,20 +5,12 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Right EE Pose1
-        - /Left EE Pose1
-        - /Target Marker1
+        - /RobotModel1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 400
   - Class: rviz_common/Selection
     Name: Selection
-  - Class: rviz_common/Tool Properties
-    Expanded:
-      - /2D Goal Pose1
-      - /Publish Point1
-    Name: Tool Properties
-    Splitter Ratio: 0.5886790156364441
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -42,7 +34,7 @@ Visualization Manager:
       Color: 160; 160; 164
       Enabled: true
       Line Style:
-        Line Width: 0.029999999329447746
+        Line Width: 0.03
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -54,13 +46,51 @@ Visualization Manager:
       Plane Cell Count: 20
       Value: true
 
+    # 机器人模型
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+
     # TF 坐标系显示
     - Class: rviz_default_plugins/TF
       Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: true
-      Marker Scale: 0.3
+        All Enabled: false
+        world:
+          Value: true
+        openarm_right_link7:
+          Value: true
+        openarm_left_link7:
+          Value: true
+        apple:
+          Value: true
+        table:
+          Value: true
+      Marker Scale: 0.15
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -68,45 +98,7 @@ Visualization Manager:
       Update Interval: 0
       Value: true
 
-    # 右臂末端执行器位置 (绿色箭头)
-    - Class: rviz_default_plugins/Pose
-      Color: 0; 255; 0
-      Enabled: true
-      Head Length: 0.05
-      Head Radius: 0.02
-      Name: Right EE Pose
-      Shaft Length: 0.1
-      Shaft Radius: 0.01
-      Shape: Arrow
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /right_ee_pose_world
-      Value: true
-
-    # 左臂末端执行器位置 (蓝色箭头)
-    - Class: rviz_default_plugins/Pose
-      Color: 0; 128; 255
-      Enabled: true
-      Head Length: 0.05
-      Head Radius: 0.02
-      Name: Left EE Pose
-      Shaft Length: 0.1
-      Shaft Radius: 0.01
-      Shape: Arrow
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /left_ee_pose_world
-      Value: true
-
-    # 目标位置标记
+    # 目标标记
     - Class: rviz_default_plugins/Marker
       Enabled: true
       Name: Target Marker
@@ -136,34 +128,6 @@ Visualization Manager:
         Value: /grasp_markers
       Value: true
 
-    # 抓取轨迹显示
-    - Class: rviz_default_plugins/Path
-      Color: 255; 255; 0
-      Enabled: true
-      Head Diameter: 0.02
-      Head Length: 0.02
-      Length: 0.3
-      Line Style: Lines
-      Line Width: 0.01
-      Name: Grasp Path
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.01
-      Shaft Diameter: 0.01
-      Shaft Length: 0.1
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /grasp_path
-      Value: true
-
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -176,8 +140,6 @@ Visualization Manager:
     - Class: rviz_default_plugins/MoveCamera
     - Class: rviz_default_plugins/Select
     - Class: rviz_default_plugins/FocusCamera
-    - Class: rviz_default_plugins/Measure
-      Line color: 128; 128; 0
   Transformation:
     Current:
       Class: rviz_default_plugins/TF
@@ -194,7 +156,7 @@ Visualization Manager:
       Focal Point:
         X: 0.8
         Y: -0.2
-        Z: 0.8
+        Z: 0.7
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05
       Invert Z Axis: false
@@ -203,22 +165,20 @@ Visualization Manager:
       Pitch: 0.5
       Target Frame: <Fixed Frame>
       Value: Orbit
-      Yaw: 0.7853981852531433
+      Yaw: 2.0
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
   Height: 900
   Hide Left Dock: false
-  Hide Right Dock: false
+  Hide Right Dock: true
   Selection:
     collapsed: false
   Time:
     collapsed: false
-  Tool Properties:
-    collapsed: false
   Views:
     collapsed: false
   Width: 1400
-  X: 72
-  Y: 27
+  X: 50
+  Y: 50

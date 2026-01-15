@@ -29,6 +29,8 @@ setup(
             'fk_test = motion_control.fk_test:main',
             'auto_grasp_coordinator = motion_control.auto_grasp_coordinator:main',
             'ee_position_test = motion_control.ee_position_test:main',
+            'target_marker_publisher = motion_control.target_marker_publisher:main',
+            'rviz_grasp_controller = motion_control.rviz_grasp_controller:main',
         ],
     },
 )
